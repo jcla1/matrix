@@ -56,6 +56,7 @@ func Eye(size int) *Matrix {
 	return A
 }
 
+// Constructs a new matrix with random values in range [0;1)
 func Rand(rows, cols int) *Matrix {
 	A := Zeros(rows, cols)
 
@@ -92,6 +93,25 @@ func FromMatlab(str string) *Matrix {
 	return A
 }
 
+// Return a Matlab representation of the matrix
+func (A *Matrix) ToMatlab() string {
+	buffer := new(bytes.Buffer)
+	buffer.WriteString("[")
+
+	for i, v := range A.values {
+		buffer.WriteString(fmt.Sprintf("%f ", v))
+
+		if (i+1)%A.cols == 0 {
+			buffer.WriteString("; ")
+		}
+	}
+
+	buffer.WriteString("]")
+
+	return buffer.String()
+}
+
+// Gives the dimensions of the matrix
 func (A *Matrix) Dim() (int, int) {
 	return A.rows, A.cols
 }
