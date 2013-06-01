@@ -159,6 +159,19 @@ func TestMatrixMul(t *testing.T) {
 	}
 }
 
+func TestMatrixDot(t *testing.T) {
+	A := Ones(3, 3).AddNum(3)
+	B := Ones(3, 3).AddNum(2)
+
+	A.Dot(B)
+
+	for _, v := range A.values {
+		if v != 12 {
+			t.Error("")
+		}
+	}
+}
+
 func TestMatrixPower(t *testing.T) {
 	A := Zeros(9, 4).AddNum(2).Power(2)
 

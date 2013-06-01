@@ -10,16 +10,17 @@ import (
 	"strings"
 )
 
-type ErrOutOfBounds bool
-type ErrIncompatibleSize bool
-
-func (e ErrOutOfBounds) Error() string {
-	return "No value there! Out of range!"
+// Describes error during calculations
+type MatrixError struct {
+	ErrorString string
 }
 
-func (e ErrIncompatibleSize) Error() string {
-	return "The matricies aren't the right dimensions."
-}
+func (err *MatrixError) Error() string { return err.ErrorString }
+
+var (
+	ErrIncompatibleSizes = &MatrixError{"Incompatible sizes of matricies"}
+	ErrOutOfBounds       = &MatrixError{"The element you are trying to access is out of bounds."}
+)
 
 type Matrix struct {
 	rows, cols int
@@ -146,7 +147,7 @@ func (A *Matrix) String() string {
 	buffer := new(bytes.Buffer)
 
 	for i, elem := range A.values {
-		buffer.WriteString(fmt.Sprintf("%f ", elem))
+		buffer.WriteString(fmt.Sprintf("%.3f ", elem))
 
 		if (i+1)%A.cols == 0 {
 			buffer.WriteString("\n")
@@ -160,7 +161,7 @@ func (A *Matrix) String() string {
 func (A *Matrix) Get(row, col int) (float64, error) {
 
 	if A.isOutOfBounds(row, col) {
-		return 0, ErrOutOfBounds(true)
+		return 0, ErrOutOfBounds
 	}
 
 	return A.values[(row-1)*A.cols+col-1], nil
@@ -170,7 +171,7 @@ func (A *Matrix) Get(row, col int) (float64, error) {
 func (A *Matrix) Set(row, col int, val float64) error {
 
 	if A.isOutOfBounds(row, col) {
-		return ErrOutOfBounds(true)
+		return ErrOutOfBounds
 	}
 
 	A.values[(row-1)*A.cols+col-1] = val
@@ -197,7 +198,7 @@ func (A *Matrix) Transpose() *Matrix {
 // Add B to the matrix A (in-place)
 func (A *Matrix) Add(B *Matrix) (*Matrix, error) {
 	if !sameSize(A, B) {
-		return nil, ErrIncompatibleSize(true)
+		return nil, ErrIncompatibleSizes
 	}
 
 	for i, val := range B.values {
@@ -210,7 +211,7 @@ func (A *Matrix) Add(B *Matrix) (*Matrix, error) {
 // Subtract B from the matrix A (in-place)
 func (A *Matrix) Sub(B *Matrix) (*Matrix, error) {
 	if !sameSize(A, B) {
-		return nil, ErrIncompatibleSize(true)
+		return nil, ErrIncompatibleSizes
 	}
 
 	for i, val := range B.values {
@@ -223,7 +224,7 @@ func (A *Matrix) Sub(B *Matrix) (*Matrix, error) {
 // Multiply 2 matricies with each other returning a new matrix
 func (A *Matrix) Mul(B *Matrix) (*Matrix, error) {
 	if !columnIsRow(A, B) {
-		return nil, ErrIncompatibleSize(true)
+		return nil, ErrIncompatibleSizes
 	}
 
 	C := Zeros(A.rows, B.cols)
@@ -241,6 +242,18 @@ func (A *Matrix) Mul(B *Matrix) (*Matrix, error) {
 	}
 
 	return C, nil
+}
+
+// Standard scalar product of 2 matricies
+func (A *Matrix) Dot(B *Matrix) (*Matrix, error) {
+	if !sameSize(A, B) {
+		return nil, ErrIncompatibleSizes
+	}
+
+	for i, v := range B.values {
+		A.values[i] *= v
+	}
+	return A, nil
 }
 
 // Scale the matrix in-place by the factor f
