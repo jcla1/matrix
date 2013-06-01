@@ -37,25 +37,70 @@ func TestMatrixOnes(t *testing.T) {
 }
 
 func TestMatrixEye(t *testing.T) {
-	A := Eye(8)
+	A := Eye(3)
+	expected_values := []float64{1, 0, 0, 0, 1, 0, 0, 0, 1}
 
 	for i, v := range A.Values() {
-		if v == 1 {
-			if (i+1)%A.cols != (i+1)/A.cols {
-				t.Error("Value not in right position")
-				break
-			}
-		} else if v == 0 {
-
-		} else {
-			t.Error("Value besides 0 or 1 encountered")
+		if v != expected_values[i] {
+			t.Error("Unexpected value")
 			break
 		}
 	}
 }
-func TestMatrixGet(t *testing.T)       {}
-func TestMatrixSet(t *testing.T)       {}
-func TestMatrixAdd(t *testing.T)       {}
+
+func TestMatrixRand(t *testing.T) {
+	A := Rand(4, 5)
+
+	for _, v := range A.Values() {
+		if v >= 1.0 || v < 0.0 {
+			t.Error("Random number out of range!")
+		}
+	}
+}
+
+func TestMatrixGet(t *testing.T) {
+	A := Ones(8, 5).AddNum(10)
+	val, err := A.Get(8, 5)
+
+	if err != nil {
+		t.Error("There was an error getting the value:", err)
+	}
+
+	if val != 11 {
+		t.Error("Wrong value was retrieved expected 11, but got:", val)
+	}
+}
+
+func TestMatrixSet(t *testing.T) {
+	A := Zeros(5, 3)
+	A.Set(4, 3, 10)
+
+	expected_values := []float64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0}
+
+	for i, v := range A.Values() {
+		if v != expected_values[i] {
+			t.Error("Unexpected value")
+			break
+		}
+	}
+}
+
+func TestMatrixAdd(t *testing.T) {
+	A := Rand(3, 5)
+	B := Rand(3, 5)
+
+	a_values := A.Values()
+	b_values := B.Values()
+
+	A.Add(B)
+
+	for i, v := range A.Values() {
+		if v != (a_values[i] + b_values[i]) {
+			t.Error("Wrong value in addition")
+			break
+		}
+	}
+}
 func TestMatrixSub(t *testing.T)       {}
 func TestMatrixMul(t *testing.T)       {}
 func TestMatrixPower(t *testing.T)     {}

@@ -1,9 +1,11 @@
+// Package matrix provides functions for simple linear algebra
 package matrix
 
 import (
 	"bytes"
 	"fmt"
 	"math"
+	"math/rand"
 	"strconv"
 	"strings"
 )
@@ -54,6 +56,16 @@ func Eye(size int) *Matrix {
 	return A
 }
 
+func Rand(rows, cols int) *Matrix {
+	A := Zeros(rows, cols)
+
+	for i := range A.values {
+		A.values[i] = rand.Float64()
+	}
+
+	return A
+}
+
 // Constructs a new Matrix from a Matlab style representation
 func FromMatlab(str string) *Matrix {
 	rows := strings.Split(str, ";")
@@ -92,7 +104,17 @@ func (A *Matrix) Columns() int {
 
 // Returns an array of all the values
 func (A *Matrix) Values() []float64 {
-	return A.values
+	tmp := make([]float64, len(A.values))
+	copy(tmp, A.values)
+	return tmp
+}
+
+// Returns an exact copy of the matrix
+func (A *Matrix) Copy() *Matrix {
+	B := Zeros(A.rows, A.cols)
+	copy(B.values, A.values)
+
+	return B
 }
 
 // Returns a string representation of the matrix
