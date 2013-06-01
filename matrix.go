@@ -22,6 +22,9 @@ var (
 	ErrOutOfBounds       = &MatrixError{"The element you are trying to access is out of bounds."}
 )
 
+// A function that will apply an abitary transformation to an element in the matrix
+type ApplyFunc func(index int, value float64) float64
+
 type Matrix struct {
 	rows, cols int
 	values     []float64
@@ -142,6 +145,14 @@ func (A *Matrix) Copy() *Matrix {
 	return B
 }
 
+func (A *Matrix) Apply(f ApplyFunc) *Matrix {
+	for i, v := range A.values {
+		A.values[i] = f(i, v)
+	}
+
+	return A
+}
+
 // Returns a string representation of the matrix
 func (A *Matrix) String() string {
 	buffer := new(bytes.Buffer)
@@ -177,6 +188,14 @@ func (A *Matrix) Set(row, col int, val float64) error {
 	A.values[(row-1)*A.cols+col-1] = val
 
 	return nil
+}
+
+func (A *Matrix) Sigmoid() *Matrix {
+	for i, v := range A.values {
+		A.values[i] = sigmoid(v)
+	}
+
+	return A
 }
 
 // Transpose the matrix (in-place, costly)
@@ -299,4 +318,9 @@ func sameSize(A, B *Matrix) bool {
 
 func columnIsRow(A, B *Matrix) bool {
 	return A.cols == B.rows
+}
+
+// Sigmoid function
+func sigmoid(z float64) float64 {
+	return 1.0 / (1.0 + math.Pow(math.E, -1.0*z))
 }
