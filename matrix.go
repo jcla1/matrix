@@ -75,16 +75,16 @@ func FromMatlab(str string) *Matrix {
 		rows[i] = strings.Replace(row, ",", " ", -1)
 	}
 
-	n_rows := len(rows)
-	n_columns := len(strings.Fields(rows[0]))
+	nRows := len(rows)
+	nColumns := len(strings.Fields(rows[0]))
 
-	A := Zeros(n_rows, n_columns)
+	A := Zeros(nRows, nColumns)
 
 	for i, row := range rows {
 		row = strings.Trim(row, "[] ")
-		str_nums := strings.Fields(row)
+		strNums := strings.Fields(row)
 
-		for j, num := range str_nums {
+		for j, num := range strNums {
 			n, _ := strconv.ParseFloat(num, 64)
 			A.Set(i+1, j+1, n)
 		}
