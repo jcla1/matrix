@@ -154,9 +154,19 @@ func (A *Matrix) Set(row, col int, val float64) error {
 	return nil
 }
 
-// Transpose the matrix (in-place)
+// Transpose the matrix (in-place, costly)
 func (A *Matrix) Transpose() *Matrix {
+	B := Zeros(A.cols, A.rows)
+
+	for i := 1; i <= A.rows; i++ {
+		for j := 1; j <= A.cols; j++ {
+			v, _ := A.Get(i, j)
+			B.Set(j, i, v)
+		}
+	}
+
 	A.rows, A.cols = A.cols, A.rows
+	copy(A.values, B.values)
 	return A
 }
 
