@@ -127,7 +127,37 @@ func TestMatrixSub(t *testing.T) {
 	}
 }
 
-func TestMatrixMul(t *testing.T) {}
+func TestMatrixMul(t *testing.T) {
+	A := Eye(5)
+	B := FromMatlab("[1 2 3 4 5; 6 7 8 9 10; 11 12 13 14 15; 16 17 18 19 20; 21 22 23 24 25]")
+
+	C, _ := A.Mul(B)
+	vals := C.Values()
+
+	expected_vals := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}
+
+	for i, v := range vals {
+		if v != expected_vals[i] {
+			t.Error("Wrong value in Multiplication with Identity matrix")
+			break
+		}
+	}
+
+	D := FromMatlab("[555,7068;5567,9370;3498,25]")
+	E := FromMatlab("[4840,4607,1493;9326,1652,4872]")
+
+	F, _ := D.Mul(E)
+	vals2 := F.Values()
+
+	expected_vals2 := []float64{68602368, 14233221, 35263911, 114328900, 41126409, 53962171, 17163470, 16156586, 5344314}
+
+	for i, v := range vals2 {
+		if v != expected_vals2[i] {
+			t.Error("Wrong value in Multiplication with matrix", v, expected_vals2[i])
+			break
+		}
+	}
+}
 
 func TestMatrixPower(t *testing.T) {
 	A := Zeros(9, 4).AddNum(2).Power(2)
@@ -154,6 +184,23 @@ func TestMatrixTranspose(t *testing.T) {
 }
 
 func TestMatrixScale(t *testing.T) {
+	vals := Ones(5, 4).Scale(5).Values()
 
+	for _, v := range vals {
+		if v != 5 {
+			t.Error("Unexpected value occurred")
+			break
+		}
+	}
 }
-func TestMatrixAddNum(t *testing.T) {}
+
+func TestMatrixAddNum(t *testing.T) {
+	vals := Zeros(3, 9).AddNum(42).Values()
+
+	for _, v := range vals {
+		if v != 42 {
+			t.Error("Unexpected value occurred")
+			break
+		}
+	}
+}

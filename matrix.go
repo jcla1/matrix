@@ -70,6 +70,10 @@ func Rand(rows, cols int) *Matrix {
 func FromMatlab(str string) *Matrix {
 	rows := strings.Split(str, ";")
 
+	for i, row := range rows {
+		rows[i] = strings.Replace(row, ",", " ", -1)
+	}
+
 	n_rows := len(rows)
 	n_columns := len(strings.Fields(rows[0]))
 
@@ -196,6 +200,7 @@ func (A *Matrix) Sub(B *Matrix) (*Matrix, error) {
 	return A, nil
 }
 
+// Multiply 2 matricies with each other returning a new matrix
 func (A *Matrix) Mul(B *Matrix) (*Matrix, error) {
 	if !columnIsRow(A, B) {
 		return nil, ErrIncompatibleSize(true)
