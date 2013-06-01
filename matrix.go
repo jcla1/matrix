@@ -18,7 +18,7 @@ func (e ErrOutOfBounds) Error() string {
 }
 
 func (e ErrIncompatibleSize) Error() string {
-	return "The matricies aren't the right dimentions."
+	return "The matricies aren't the right dimensions."
 }
 
 type Matrix struct {
