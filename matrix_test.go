@@ -100,9 +100,9 @@ func TestMatrixAdd(t *testing.T) {
 	a_values := A.Values()
 	b_values := B.Values()
 
-	A.Add(B)
+	C, _ := A.Add(B)
 
-	for i, v := range A.Values() {
+	for i, v := range C.Values() {
 		if v != (a_values[i] + b_values[i]) {
 			t.Error("Wrong value in addition")
 			break
