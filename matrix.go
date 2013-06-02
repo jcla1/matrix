@@ -10,25 +10,27 @@ import (
 	"strings"
 )
 
-// Describes error during calculations
-type MatrixError struct {
-	ErrorString string
-}
-
-func (err *MatrixError) Error() string { return err.ErrorString }
-
 var (
 	ErrIncompatibleSizes = &MatrixError{"Incompatible sizes of matricies"}
 	ErrOutOfBounds       = &MatrixError{"The element you are trying to access is out of bounds."}
 )
 
-// A function that will apply an abitary transformation to an element in the matrix
-type ApplyFunc func(index int, value float64) float64
+// Describes error during calculations
+type MatrixError struct {
+	ErrorString string
+}
 
+// Return the Error's string
+func (err *MatrixError) Error() string { return err.ErrorString }
+
+// Matrix construct that holds all the information about a matrix
 type Matrix struct {
 	rows, cols int
 	values     []float64
 }
+
+// A function that will apply an abitary transformation to an element in the matrix
+type ApplyFunc func(index int, value float64) float64
 
 // Creates a new Matrix and initializes all values to 0
 func Zeros(rows, cols int) *Matrix {
