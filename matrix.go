@@ -209,11 +209,13 @@ func (A *Matrix) Add(B *Matrix) (*Matrix, error) {
 		return nil, ErrIncompatibleSizes
 	}
 
-	for i, val := range B.values {
-		A.values[i] += val
+	C := Zeros(A.rows, A.cols)
+
+	for i, val := range A.values {
+		C.values[i] = val + B.values[i]
 	}
 
-	return A, nil
+	return C, nil
 }
 
 // Subtract B from the matrix A (in-place)
