@@ -273,11 +273,13 @@ func (A *Matrix) Dot(B *Matrix) (*Matrix, error) {
 
 // Scale the matrix in-place by the factor f
 func (A *Matrix) Scale(f float64) *Matrix {
-	for i := range A.values {
-		A.values[i] *= f
+	B := Zeros(A.rows, A.cols)
+
+	for i, val := range A.values {
+		B.values[i] = val * f
 	}
 
-	return A
+	return B
 }
 
 // Take every element of the matrix to the power of n (in-place)
