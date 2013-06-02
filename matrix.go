@@ -190,14 +190,6 @@ func (A *Matrix) Set(row, col int, val float64) error {
 	return nil
 }
 
-func (A *Matrix) Sigmoid() *Matrix {
-	for i, v := range A.values {
-		A.values[i] = sigmoid(v)
-	}
-
-	return A
-}
-
 // Transpose the matrix (in-place, costly)
 func (A *Matrix) Transpose() *Matrix {
 	B := Zeros(A.cols, A.rows)
@@ -318,9 +310,4 @@ func sameSize(A, B *Matrix) bool {
 
 func columnIsRow(A, B *Matrix) bool {
 	return A.cols == B.rows
-}
-
-// Sigmoid function
-func sigmoid(z float64) float64 {
-	return 1.0 / (1.0 + math.Pow(math.E, -1.0*z))
 }
