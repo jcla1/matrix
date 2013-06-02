@@ -17,7 +17,7 @@ func BenchmarkMulBig(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		A.Mul(B)
+		A.SafeMul(B)
 	}
 }
 

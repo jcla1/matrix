@@ -233,11 +233,23 @@ func (A *Matrix) Sub(B *Matrix) (*Matrix, error) {
 	return C, nil
 }
 
-// Multiply 2 matricies with each other returning a new matrix
-func (A *Matrix) Mul(B *Matrix) (*Matrix, error) {
+// Multiplies 2 matricies with each other safely.
+// Returns a new matrix.
+func (A *Matrix) SafeMul(B *Matrix) (*Matrix, error) {
 	if !columnIsRow(A, B) {
 		return nil, ErrIncompatibleSizes
 	}
+
+	return A.Mul(B), nil
+}
+
+// Multiplies 2 matricies with each other without boundary checking.
+// Returns a new matrix.
+//
+// Warning: This is an unsafe method to use, it does no boundary
+// checking what so ever. If you'd like a safe version
+// use: SafeMul
+func (A *Matrix) Mul(B *Matrix) *Matrix {
 
 	C := Zeros(A.rows, B.cols)
 
@@ -253,7 +265,7 @@ func (A *Matrix) Mul(B *Matrix) (*Matrix, error) {
 		}
 	}
 
-	return C, nil
+	return C
 }
 
 // Standard scalar product of 2 matricies

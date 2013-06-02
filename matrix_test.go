@@ -131,7 +131,7 @@ func TestMatrixMul(t *testing.T) {
 	A := Eye(5)
 	B := FromMatlab("[1 2 3 4 5; 6 7 8 9 10; 11 12 13 14 15; 16 17 18 19 20; 21 22 23 24 25]")
 
-	C, _ := A.Mul(B)
+	C, _ := A.SafeMul(B)
 	vals := C.Values()
 
 	expected_vals := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}
@@ -146,7 +146,7 @@ func TestMatrixMul(t *testing.T) {
 	D := FromMatlab("[555,7068;5567,9370;3498,25]")
 	E := FromMatlab("[4840,4607,1493;9326,1652,4872]")
 
-	F, _ := D.Mul(E)
+	F, _ := D.SafeMul(E)
 	vals2 := F.Values()
 
 	expected_vals2 := []float64{68602368, 14233221, 35263911, 114328900, 41126409, 53962171, 17163470, 16156586, 5344314}
