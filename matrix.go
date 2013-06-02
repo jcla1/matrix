@@ -196,8 +196,7 @@ func (A *Matrix) Transpose() *Matrix {
 
 	for i := 1; i <= A.rows; i++ {
 		for j := 1; j <= A.cols; j++ {
-			v, _ := A.Get(i, j)
-			B.Set(j, i, v)
+			B.values[(j-1)*B.cols+i-1] = A.values[(i-1)*A.cols+j-1]
 		}
 	}
 
