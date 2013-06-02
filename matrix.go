@@ -137,6 +137,21 @@ func (A *Matrix) Values() []float64 {
 	return tmp
 }
 
+// Returns a string representation of the matrix
+func (A *Matrix) String() string {
+	buffer := new(bytes.Buffer)
+
+	for i, elem := range A.values {
+		buffer.WriteString(fmt.Sprintf("%.3f ", elem))
+
+		if (i+1)%A.cols == 0 {
+			buffer.WriteString("\n")
+		}
+	}
+
+	return buffer.String()
+}
+
 // Returns an exact copy of the matrix
 func (A *Matrix) Copy() *Matrix {
 	B := Zeros(A.rows, A.cols)
@@ -151,21 +166,6 @@ func (A *Matrix) Apply(f ApplyFunc) *Matrix {
 	}
 
 	return A
-}
-
-// Returns a string representation of the matrix
-func (A *Matrix) String() string {
-	buffer := new(bytes.Buffer)
-
-	for i, elem := range A.values {
-		buffer.WriteString(fmt.Sprintf("%.3f ", elem))
-
-		if (i+1)%A.cols == 0 {
-			buffer.WriteString("\n")
-		}
-	}
-
-	return buffer.String()
 }
 
 // Retrieve value at [row, col]
@@ -190,7 +190,7 @@ func (A *Matrix) Set(row, col int, val float64) error {
 	return nil
 }
 
-// Transpose the matrix (in-place, costly)
+// Transpose the matrix
 func (A *Matrix) Transpose() *Matrix {
 	B := Zeros(A.cols, A.rows)
 
@@ -200,9 +200,7 @@ func (A *Matrix) Transpose() *Matrix {
 		}
 	}
 
-	A.rows, A.cols = A.cols, A.rows
-	copy(A.values, B.values)
-	return A
+	return B
 }
 
 // Add B to the matrix A (in-place)
