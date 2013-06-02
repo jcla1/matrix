@@ -243,7 +243,7 @@ func (A *Matrix) SafeMul(B *Matrix) (*Matrix, error) {
 	return A.Mul(B), nil
 }
 
-// Multiplies 2 matricies with each other without boundary checking.
+// Multiplies 2 matricies with each other.
 // Returns a new matrix.
 //
 // Warning: This is an unsafe method to use, it does no boundary
@@ -268,12 +268,23 @@ func (A *Matrix) Mul(B *Matrix) *Matrix {
 	return C
 }
 
-// Standard scalar product of 2 matricies
-func (A *Matrix) Dot(B *Matrix) (*Matrix, error) {
+// Calculates the standard scalar product of 2 matrixies safely.
+// Returns a new matrix.
+func (A *Matrix) SafeDot(B *Matrix) (*Matrix, error) {
 	if !sameSize(A, B) {
 		return nil, ErrIncompatibleSizes
 	}
 
+	return A.Dot(B), nil
+}
+
+// Standard scalar product of 2 matricies.
+// Returns a new matrix.
+//
+// Warning: This is an unsafe method to use, it does no boundary
+// checking what so ever. If you'd like a safe version
+// use: SafeDot
+func (A *Matrix) Dot(B *Matrix) *Matrix {
 	C := Zeros(A.rows, A.cols)
 
 	for i, val := range A.values {
