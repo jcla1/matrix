@@ -203,7 +203,7 @@ func (A *Matrix) Transpose() *Matrix {
 	return B
 }
 
-// Add B to the matrix A (in-place)
+// Add B to the matrix A, produces new matrix
 func (A *Matrix) Add(B *Matrix) (*Matrix, error) {
 	if !sameSize(A, B) {
 		return nil, ErrIncompatibleSizes
@@ -218,17 +218,19 @@ func (A *Matrix) Add(B *Matrix) (*Matrix, error) {
 	return C, nil
 }
 
-// Subtract B from the matrix A (in-place)
+// Subtract B from the matrix A, produces a new matrix
 func (A *Matrix) Sub(B *Matrix) (*Matrix, error) {
 	if !sameSize(A, B) {
 		return nil, ErrIncompatibleSizes
 	}
 
-	for i, val := range B.values {
-		A.values[i] -= val
+	C := Zeros(A.rows, A.cols)
+
+	for i, val := range A.values {
+		C.values[i] = val - B.values[i]
 	}
 
-	return A, nil
+	return C, nil
 }
 
 // Multiply 2 matricies with each other returning a new matrix
@@ -260,10 +262,13 @@ func (A *Matrix) Dot(B *Matrix) (*Matrix, error) {
 		return nil, ErrIncompatibleSizes
 	}
 
-	for i, v := range B.values {
-		A.values[i] *= v
+	C := Zeros(A.rows, A.cols)
+
+	for i, val := range A.values {
+		C.values[i] = val * B.values[i]
 	}
-	return A, nil
+
+	return C, nil
 }
 
 // Scale the matrix in-place by the factor f

@@ -117,9 +117,9 @@ func TestMatrixSub(t *testing.T) {
 	a_values := A.Values()
 	b_values := B.Values()
 
-	A.Sub(B)
+	C, _ := A.Sub(B)
 
-	for i, v := range A.Values() {
+	for i, v := range C.Values() {
 		if v != (a_values[i] - b_values[i]) {
 			t.Error("Wrong value in subtraction")
 			break
@@ -163,11 +163,11 @@ func TestMatrixDot(t *testing.T) {
 	A := Ones(3, 3).AddNum(3)
 	B := Ones(3, 3).AddNum(2)
 
-	A.Dot(B)
+	C, _ := A.Dot(B)
 
-	for _, v := range A.values {
-		if v != 12 {
-			t.Error("")
+	for _, val := range C.values {
+		if val != 12 {
+			t.Error("Error in scalar multiplication")
 		}
 	}
 }
