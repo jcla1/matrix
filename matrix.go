@@ -74,6 +74,8 @@ func Rand(rows, cols int) *Matrix {
 }
 
 // Constructs a new Matrix from a Matlab style representation
+//
+//	A := matrix.FromMatlab("[1 2 3; 4 5 6]")
 func FromMatlab(str string) *Matrix {
 	rows := strings.Split(str, ";")
 
@@ -162,6 +164,12 @@ func (A *Matrix) Copy() *Matrix {
 	return B
 }
 
+// Give a function, apply its transformation to every element in the matrix.
+//
+//	A := matrix.Rand(4, 8)
+//	A.Apply(func(index int, value float64) float64 {
+//		return sigmoid(value)
+//	})
 func (A *Matrix) Apply(f ApplyFunc) *Matrix {
 	for i, v := range A.values {
 		A.values[i] = f(i, v)
@@ -170,6 +178,11 @@ func (A *Matrix) Apply(f ApplyFunc) *Matrix {
 	return A
 }
 
+// Get the element at [row, col].
+//
+// Warning: This is an unsafe method to use, it does no boundary
+// checking what so ever. If you'd like a safe version
+// use: SafeGet
 func (A *Matrix) Get(row, col int) float64 {
 	return A.values[(row-1)*A.cols+col-1]
 }
