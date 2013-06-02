@@ -68,7 +68,7 @@ func TestMatrixDim(t *testing.T) {
 
 func TestMatrixGet(t *testing.T) {
 	A := Ones(8, 5).AddNum(10)
-	val, err := A.Get(8, 5)
+	val, err := A.SafeGet(8, 5)
 
 	if err != nil {
 		t.Error("There was an error getting the value:", err)
@@ -81,7 +81,7 @@ func TestMatrixGet(t *testing.T) {
 
 func TestMatrixSet(t *testing.T) {
 	A := Zeros(5, 3)
-	A.Set(4, 3, 10)
+	A.SafeSet(4, 3, 10)
 
 	expected_values := []float64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0}
 
@@ -163,7 +163,7 @@ func TestMatrixDot(t *testing.T) {
 	A := Ones(3, 3).AddNum(3)
 	B := Ones(3, 3).AddNum(2)
 
-	C, _ := A.Dot(B)
+	C, _ := A.SafeDot(B)
 
 	for _, val := range C.values {
 		if val != 12 {

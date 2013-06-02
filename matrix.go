@@ -168,26 +168,19 @@ func (A *Matrix) Apply(f ApplyFunc) *Matrix {
 	return A
 }
 
-// Retrieve value at [row, col]
-func (A *Matrix) Get(row, col int) (float64, error) {
-
-	if A.isOutOfBounds(row, col) {
-		return 0, ErrOutOfBounds
-	}
-
-	return A.values[(row-1)*A.cols+col-1], nil
+func (A *Matrix) Get(row, col int) float64 {
+	return A.values[(row-1)*A.cols+col-1]
 }
 
-// Set the element at [row, col] to val
-func (A *Matrix) Set(row, col int, val float64) error {
-
-	if A.isOutOfBounds(row, col) {
-		return ErrOutOfBounds
-	}
+// Set the element at [row, col] to val.
+//
+// Warning: This is an unsafe method to use, it does no boundary
+// checking what so ever. If you'd like a safe version
+// use: SafeSet
+func (A *Matrix) Set(row, col int, val float64) {
 
 	A.values[(row-1)*A.cols+col-1] = val
 
-	return nil
 }
 
 // Transpose the matrix
@@ -233,16 +226,6 @@ func (A *Matrix) Sub(B *Matrix) (*Matrix, error) {
 	return C, nil
 }
 
-// Multiplies 2 matricies with each other safely.
-// Returns a new matrix.
-func (A *Matrix) SafeMul(B *Matrix) (*Matrix, error) {
-	if !columnIsRow(A, B) {
-		return nil, ErrIncompatibleSizes
-	}
-
-	return A.Mul(B), nil
-}
-
 // Multiplies 2 matricies with each other.
 // Returns a new matrix.
 //
@@ -268,16 +251,6 @@ func (A *Matrix) Mul(B *Matrix) *Matrix {
 	return C
 }
 
-// Calculates the standard scalar product of 2 matrixies safely.
-// Returns a new matrix.
-func (A *Matrix) SafeDot(B *Matrix) (*Matrix, error) {
-	if !sameSize(A, B) {
-		return nil, ErrIncompatibleSizes
-	}
-
-	return A.Dot(B), nil
-}
-
 // Standard scalar product of 2 matricies.
 // Returns a new matrix.
 //
@@ -291,7 +264,7 @@ func (A *Matrix) Dot(B *Matrix) *Matrix {
 		C.values[i] = val * B.values[i]
 	}
 
-	return C, nil
+	return C
 }
 
 // Scale the matrix by the factor f
@@ -323,22 +296,4 @@ func (A *Matrix) AddNum(n float64) *Matrix {
 	}
 
 	return A
-}
-
-func (A *Matrix) isOutOfBounds(row, col int) bool {
-	index := (row-1)*A.cols + col - 1
-
-	if index >= len(A.values) {
-		return true
-	}
-
-	return false
-}
-
-func sameSize(A, B *Matrix) bool {
-	return A.rows == B.rows && A.cols == B.cols
-}
-
-func columnIsRow(A, B *Matrix) bool {
-	return A.cols == B.rows
 }
