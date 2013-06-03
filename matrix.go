@@ -164,6 +164,27 @@ func (A *Matrix) Copy() *Matrix {
 	return B
 }
 
+// Insert the given rows into the matrix, returning a new matrix.
+// Passing 0 as the second argument is like making the
+// passed rows the first few, whereas passing Rows() is like appending
+// the additional rows to the matrix.
+func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
+	B := Zeros(A.rows+rows.rows, A.cols)
+
+	// copy rows before inserted rows
+	copy(B.values[0:afterRow*B.cols], A.values[0:afterRow*B.cols])
+	// insert new rows
+	copy(B.values[afterRow*B.cols:afterRow*B.cols+rows.rows*B.cols], rows.values)
+	// copy rows after inserted rows
+	copy(B.values[afterRow*B.cols+rows.rows*B.cols:], A.values[afterRow*B.cols:])
+
+	return B
+}
+
+func (A *Matrix) InsertColumns(cols *Matrix, afterRow int) *Matrix {
+	return Zeros(1, 1)
+}
+
 // Give a function, apply its transformation to every element in the matrix.
 //
 //	A := matrix.Rand(4, 8)
