@@ -203,6 +203,29 @@ func TestMatrixAddNum(t *testing.T) {
 	}
 }
 
+func TestMatrixInsertRow(t *testing.T) {
+	var values []float64
+	expected_values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+	values = FromMatlab("[5 6; 7 8; 9 10]").InsertRows(FromMatlab("[1 2; 3 4]"), 0).values
+
+	if !arraysIdentical(values, expected_values) {
+		t.Error("Insertion error (unshifting rows)")
+	}
+
+	values = FromMatlab("[1 2; 3 4; 9 10]").InsertRows(FromMatlab("[5 6; 7 8]"), 2).values
+
+	if !arraysIdentical(values, expected_values) {
+		t.Error("Insertion error (middle rows)")
+	}
+
+	values = FromMatlab("[1 2; 3 4; 5 6]").InsertRows(FromMatlab("[7 8; 9 10]"), 3).values
+
+	if !arraysIdentical(values, expected_values) {
+		t.Error("Insertion error (pushing rows)")
+	}
+}
+
 func arraysIdentical(arr1, arr2 []float64) bool {
 	if len(arr1) != len(arr2) {
 		return false
