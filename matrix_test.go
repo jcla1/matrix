@@ -40,11 +40,8 @@ func TestMatrixEye(t *testing.T) {
 	A := Eye(3)
 	expected_values := []float64{1, 0, 0, 0, 1, 0, 0, 0, 1}
 
-	for i, v := range A.Values() {
-		if v != expected_values[i] {
-			t.Error("Unexpected value")
-			break
-		}
+	if !arraysIdentical(A.values, expected_values) {
+		t.Error("Unexpected value")
 	}
 }
 
@@ -83,13 +80,10 @@ func TestMatrixSet(t *testing.T) {
 	A := Zeros(5, 3)
 	A.SafeSet(4, 3, 10)
 
-	expected_values := []float64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0}
+	expected_values := []float64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0}
 
-	for i, v := range A.Values() {
-		if v != expected_values[i] {
-			t.Error("Unexpected value")
-			break
-		}
+	if !arraysIdentical(A.Values(), expected_values) {
+		t.Error("Unexpected value")
 	}
 }
 
@@ -132,30 +126,24 @@ func TestMatrixMul(t *testing.T) {
 	B := FromMatlab("[1 2 3 4 5; 6 7 8 9 10; 11 12 13 14 15; 16 17 18 19 20; 21 22 23 24 25]")
 
 	C, _ := A.SafeMul(B)
-	vals := C.Values()
+	values := C.Values()
 
-	expected_vals := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}
+	expected_values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}
 
-	for i, v := range vals {
-		if v != expected_vals[i] {
-			t.Error("Wrong value in Multiplication with Identity matrix")
-			break
-		}
+	if !arraysIdentical(values, expected_values) {
+		t.Error("Wrong value in Multiplication with Identity matrix")
 	}
 
 	D := FromMatlab("[555,7068;5567,9370;3498,25]")
 	E := FromMatlab("[4840,4607,1493;9326,1652,4872]")
 
 	F, _ := D.SafeMul(E)
-	vals2 := F.Values()
+	values2 := F.Values()
 
-	expected_vals2 := []float64{68602368, 14233221, 35263911, 114328900, 41126409, 53962171, 17163470, 16156586, 5344314}
+	expected_values2 := []float64{68602368, 14233221, 35263911, 114328900, 41126409, 53962171, 17163470, 16156586, 5344314}
 
-	for i, v := range vals2 {
-		if v != expected_vals2[i] {
-			t.Error("Wrong value in Multiplication with matrix", v, expected_vals2[i])
-			break
-		}
+	if !arraysIdentical(values2, expected_values2) {
+		t.Error("Wrong value in Multiplication with matrix")
 	}
 }
 
@@ -184,15 +172,12 @@ func TestMatrixPower(t *testing.T) {
 }
 
 func TestMatrixTranspose(t *testing.T) {
-	vals := FromMatlab("[1 2; 3 4; 5 6]").Transpose().Values()
+	values := FromMatlab("[1 2; 3 4; 5 6]").Transpose().Values()
 
-	expected_vals := []float64{1, 3, 5, 2, 4, 6}
+	expected_values := []float64{1, 3, 5, 2, 4, 6}
 
-	for i, v := range vals {
-		if v != expected_vals[i] {
-			t.Error("Unexpected value occurred")
-			break
-		}
+	if !arraysIdentical(values, expected_values) {
+		t.Error("Unexpected value occurred")
 	}
 }
 
@@ -216,4 +201,18 @@ func TestMatrixAddNum(t *testing.T) {
 			break
 		}
 	}
+}
+
+func arraysIdentical(arr1, arr2 []float64) bool {
+	if len(arr1) != len(arr2) {
+		return false
+	}
+
+	for i, val := range arr1 {
+		if val != arr2[i] {
+			return false
+		}
+	}
+
+	return true
 }
