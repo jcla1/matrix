@@ -41,6 +41,22 @@ func (A *Matrix) SafeDot(B *Matrix) (*Matrix, error) {
 	return A.Dot(B), nil
 }
 
+// Insert the given rows into the matrix, returning a new matrix.
+// Passing 0 as the second argument is like making the
+// passed rows the first few, whereas passing Rows() is like appending
+// the additional rows to the matrix.
+func (A *Matrix) SafeInsertRows(rows *Matrix, afterRow int) (*Matrix, error) {
+	if rows.cols != A.rows {
+		return nil, ErrIncompatibleSizes
+	}
+
+	if afterRow < 0 || afterRow > A.rows {
+		return nil, ErrInsertionOutOfBounds
+	}
+
+	return A.InsertRows(rows, afterRow), nil
+}
+
 func (A *Matrix) isOutOfBounds(row, col int) bool {
 	index := (row-1)*A.cols + col - 1
 

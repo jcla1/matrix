@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	ErrIncompatibleSizes = &MatrixError{"Incompatible sizes of matricies"}
-	ErrOutOfBounds       = &MatrixError{"The element you are trying to access is out of bounds."}
+	ErrIncompatibleSizes    = &MatrixError{"Incompatible sizes of matricies"}
+	ErrInsertionOutOfBounds = &MatrixError{"The matrix you are trying to insert to hasn't got that row or column."}
+	ErrOutOfBounds          = &MatrixError{"The element you are trying to access is out of bounds."}
 )
 
 // Describes error during calculations
@@ -168,6 +169,10 @@ func (A *Matrix) Copy() *Matrix {
 // Passing 0 as the second argument is like making the
 // passed rows the first few, whereas passing Rows() is like appending
 // the additional rows to the matrix.
+//
+// Warning: This is an unsafe method to use, it does no boundary
+// checking what so ever. If you'd like a safe version
+// use: SafeInsertRows
 func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 	B := Zeros(A.rows+rows.rows, A.cols)
 
@@ -181,7 +186,7 @@ func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 	return B
 }
 
-func (A *Matrix) InsertColumns(cols *Matrix, afterRow int) *Matrix {
+func (A *Matrix) InsertColumns(cols *Matrix, afterCol int) *Matrix {
 	return Zeros(1, 1)
 }
 
