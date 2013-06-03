@@ -13,7 +13,7 @@ func (A *Matrix) SafeGet(row, col int) (float64, error) {
 // Multiplies 2 matricies with each other safely.
 // Returns a new matrix.
 func (A *Matrix) SafeMul(B *Matrix) (*Matrix, error) {
-	if !columnIsRow(A, B) {
+	if !isSquare(A, B) {
 		return nil, ErrIncompatibleSizes
 	}
 
@@ -55,6 +55,6 @@ func sameSize(A, B *Matrix) bool {
 	return A.rows == B.rows && A.cols == B.cols
 }
 
-func columnIsRow(A, B *Matrix) bool {
+func isSquare(A, B *Matrix) bool {
 	return A.cols == B.rows
 }
