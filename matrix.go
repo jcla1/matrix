@@ -186,8 +186,18 @@ func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 	return B
 }
 
+// Insert the given columns into the matrix, returning a new matrix.
+// Passing 0 as the second argument is like making the
+// passed columns the first few (on the left), whereas passing Columns() is like appending
+// the additional columns to the matrix (on the right).
+//
+// Warning: This is an unsafe method to use, it does no boundary
+// checking what so ever. If you'd like a safe version
+// use: SafeInsertColumns
 func (A *Matrix) InsertColumns(cols *Matrix, afterCol int) *Matrix {
-	return Zeros(1, 1)
+	B := Zeros(A.rows, A.cols+cols.cols)
+
+	return B
 }
 
 // Give a function, apply its transformation to every element in the matrix.
