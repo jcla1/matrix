@@ -197,6 +197,12 @@ func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 func (A *Matrix) InsertColumns(cols *Matrix, afterCol int) *Matrix {
 	B := Zeros(A.rows, A.cols+cols.cols)
 
+	for i := 0; i < A.rows; i++ {
+		copy(B.values[i*B.cols:i*B.cols+afterCol], A.values[i*A.cols:i*A.cols+afterCol])
+		copy(B.values[i*B.cols+afterCol:i*B.cols+afterCol+cols.cols], cols.values[i*cols.cols:(i+1)*cols.cols])
+		copy(B.values[i*B.cols+afterCol+cols.cols:(i+1)*B.cols], A.values[i*A.cols+afterCol:(i+1)*A.cols])
+	}
+
 	return B
 }
 
