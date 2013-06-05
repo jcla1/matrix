@@ -46,7 +46,7 @@ func (A *Matrix) SafeDot(B *Matrix) (*Matrix, error) {
 // passed rows the first few, whereas passing Rows() is like appending
 // the additional rows to the matrix.
 func (A *Matrix) SafeInsertRows(rows *Matrix, afterRow int) (*Matrix, error) {
-	if rows.cols != A.rows {
+	if rows.cols != A.cols {
 		return nil, ErrIncompatibleSizes
 	}
 
@@ -55,6 +55,18 @@ func (A *Matrix) SafeInsertRows(rows *Matrix, afterRow int) (*Matrix, error) {
 	}
 
 	return A.InsertRows(rows, afterRow), nil
+}
+
+func (A *Matrix) SafeInsertColumns(cols *Matrix, afterCol int) (*Matrix, error) {
+	if cols.rows != A.rows {
+		return nil, ErrIncompatibleSizes
+	}
+
+	if afterCol < 0 || afterCol > A.cols {
+		return nil, ErrInsertionOutOfBounds
+	}
+
+	return A.InsertColumns(cols, afterCol), nil
 }
 
 func (A *Matrix) isOutOfBounds(row, col int) bool {
