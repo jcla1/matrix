@@ -301,7 +301,7 @@ func (A *Matrix) Mul(B *Matrix) *Matrix {
 				sum += A.values[i*A.cols+k] * B.values[k*B.cols+j]
 			}
 
-			C.values[i*C.rows+j] = sum
+			C.values[i*C.cols+j] = sum
 		}
 	}
 
