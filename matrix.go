@@ -186,6 +186,12 @@ func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 	return B
 }
 
+func (A *Matrix) RemoveRow(row int) *Matrix {
+	B := Zeros(A.rows-1, A.cols)
+	copy(B.values, append(append([]float64{}, A.values[:(row-1)*A.cols]...), A.values[(row-1)*A.cols+A.cols:]...))
+	return B
+}
+
 // Insert the given columns into the matrix, returning a new matrix.
 // Passing 0 as the second argument is like making the
 // passed columns the first few (on the left), whereas passing Columns() is like appending
