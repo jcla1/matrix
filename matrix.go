@@ -186,6 +186,8 @@ func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 	return B
 }
 
+// Remove a single row from the matrix.
+// The indexing for the rows start with 1 and go upto A.Rows()
 func (A *Matrix) RemoveRow(row int) *Matrix {
 	B := Zeros(A.rows-1, A.cols)
 	copy(B.values, append(append([]float64{}, A.values[:(row-1)*A.cols]...), A.values[(row-1)*A.cols+A.cols:]...))
