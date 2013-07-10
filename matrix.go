@@ -316,6 +316,13 @@ func (A *Matrix) Mul(B *Matrix) *Matrix {
 	return C
 }
 
+func (A *Matrix) Dot(B *Matrix) float64 {
+	sum := 0.0
+	for i, v := range A.values {
+		sum += v * B.values[i]
+	}
+}
+
 // Element-wise multiplication of the matricies
 // Returns a new matrix.
 //
