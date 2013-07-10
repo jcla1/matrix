@@ -31,14 +31,14 @@ func (A *Matrix) SafeSet(row, col int, val float64) error {
 	return nil
 }
 
-// Calculates the standard scalar product of 2 matrixies safely.
+// Calculates the element-wise product of 2 matricies safely.
 // Returns a new matrix.
-func (A *Matrix) SafeDot(B *Matrix) (*Matrix, error) {
+func (A *Matrix) SafeEWProd(B *Matrix) (*Matrix, error) {
 	if !sameSize(A, B) {
 		return nil, ErrIncompatibleSizes
 	}
 
-	return A.Dot(B), nil
+	return A.EWProd(B), nil
 }
 
 // Insert the given rows into the matrix, returning a new matrix.

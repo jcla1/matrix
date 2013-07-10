@@ -316,13 +316,13 @@ func (A *Matrix) Mul(B *Matrix) *Matrix {
 	return C
 }
 
-// Standard scalar product of 2 matricies.
+// Element-wise multiplication of the matricies
 // Returns a new matrix.
 //
 // Warning: This is an unsafe method to use, it does no boundary
 // checking what so ever. If you'd like a safe version
-// use: SafeDot
-func (A *Matrix) Dot(B *Matrix) *Matrix {
+// use: SafeEWProd
+func (A *Matrix) EWProd(B *Matrix) *Matrix {
 	C := Zeros(A.rows, A.cols)
 
 	for i, val := range A.values {
