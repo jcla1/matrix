@@ -194,15 +194,6 @@ func (A *Matrix) RemoveRow(row int) *Matrix {
 	return B
 }
 
-func (A *Matrix) RemoveColumn(col int) *Matrix {
-	B := Zeros(A.rows, A.cols-1)
-	for i := 1; i <= B.rows; i++ {
-
-	}
-
-	return B
-}
-
 // Insert the given columns into the matrix, returning a new matrix.
 // Passing 0 as the second argument is like making the
 // passed columns the first few (on the left), whereas passing Columns() is like appending
