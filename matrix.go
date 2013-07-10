@@ -321,6 +321,8 @@ func (A *Matrix) Dot(B *Matrix) float64 {
 	for i, v := range A.values {
 		sum += v * B.values[i]
 	}
+
+	return sum
 }
 
 // Element-wise multiplication of the matricies
