@@ -165,6 +165,19 @@ func (A *Matrix) Copy() *Matrix {
 	return B
 }
 
+
+func (A *Matrix) Unroll() *Matrix {
+	return A.Reshape(A.rows*A.cols, 1)
+}
+
+// Reshapes the matrix. Make sure they have the same number of elements
+func (A *Matrix) Reshape(rows, cols int) *Matrix {
+	B := Zeros(rows, cols)
+	copy(B.values, A.values)
+
+	return B
+}
+
 // Insert the given rows into the matrix, returning a new matrix.
 // Passing 0 as the second argument is like making the
 // passed rows the first few, whereas passing Rows() is like appending
