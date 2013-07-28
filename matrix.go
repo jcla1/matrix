@@ -120,6 +120,13 @@ func (A *Matrix) ToMatlab() string {
 	return buffer.String()
 }
 
+func FromSlice(s []float64, rows, cols int) *Matrix {
+	A := Zeros(rows, cols)
+	copy(A.values, s)
+
+	return A
+}
+
 // Gives the dimensions of the matrix
 func (A *Matrix) Dim() (int, int) {
 	return A.rows, A.cols
