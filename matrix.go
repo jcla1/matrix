@@ -154,9 +154,9 @@ func (A *Matrix) String() string {
 	buffer := new(bytes.Buffer)
 
 	for i, elem := range A.values {
-		buffer.WriteString(fmt.Sprintf("%.3f ", elem))
+		buffer.WriteString(fmt.Sprintf(" %.3f ", elem))
 
-		if (i+1)%A.cols == 0 {
+		if (i+1)%A.cols == 0 && i+1 != len(A.values) {
 			buffer.WriteString("\n")
 		}
 	}
@@ -171,7 +171,6 @@ func (A *Matrix) Copy() *Matrix {
 
 	return B
 }
-
 
 func (A *Matrix) Unroll() *Matrix {
 	return A.Reshape(A.rows*A.cols, 1)
