@@ -133,12 +133,12 @@ func (A *Matrix) Dim() (int, int) {
 }
 
 // Return the number of rows in the matrix
-func (A *Matrix) Rows() int {
+func (A *Matrix) R() int {
 	return A.Rows
 }
 
 // Return the number of columns in the matrix
-func (A *Matrix) Columns() int {
+func (A *Matrix) C() int {
 	return A.Cols
 }
 
@@ -186,7 +186,7 @@ func (A *Matrix) Reshape(rows, cols int) *Matrix {
 
 // Insert the given rows into the matrix, returning a new matrix.
 // Passing 0 as the second argument is like making the
-// passed rows the first few, whereas passing Rows() is like appending
+// passed rows the first few, whereas passing R() is like appending
 // the additional rows to the matrix.
 //
 // Warning: This is an unsafe method to use, it does no boundary
@@ -206,7 +206,7 @@ func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 }
 
 // Remove a single row from the matrix.
-// The indexing for the rows start with 1 and go upto A.Rows()
+// The indexing for the rows start with 1 and go upto A.R()
 func (A *Matrix) RemoveRow(row int) *Matrix {
 	B := Zeros(A.Rows-1, A.Cols)
 	copy(B.Values, append(append([]float64{}, A.Values[:(row-1)*A.Cols]...), A.Values[(row-1)*A.Cols+A.Cols:]...))
