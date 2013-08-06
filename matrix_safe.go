@@ -46,11 +46,11 @@ func (A *Matrix) SafeEWProd(B *Matrix) (*Matrix, error) {
 // passed rows the first few, whereas passing Rows() is like appending
 // the additional rows to the matrix.
 func (A *Matrix) SafeInsertRows(rows *Matrix, afterRow int) (*Matrix, error) {
-	if rows.cols != A.cols {
+	if rows.Cols != A.Cols {
 		return nil, ErrIncompatibleSizes
 	}
 
-	if afterRow < 0 || afterRow > A.rows {
+	if afterRow < 0 || afterRow > A.Rows {
 		return nil, ErrInsertionOutOfBounds
 	}
 
@@ -62,11 +62,11 @@ func (A *Matrix) SafeInsertRows(rows *Matrix, afterRow int) (*Matrix, error) {
 // passed columns the first few (on the left), whereas passing Columns() is like appending
 // the additional columns to the matrix (on the right).
 func (A *Matrix) SafeInsertColumns(cols *Matrix, afterCol int) (*Matrix, error) {
-	if cols.rows != A.rows {
+	if cols.Rows != A.Rows {
 		return nil, ErrIncompatibleSizes
 	}
 
-	if afterCol < 0 || afterCol > A.cols {
+	if afterCol < 0 || afterCol > A.Cols {
 		return nil, ErrInsertionOutOfBounds
 	}
 
@@ -74,9 +74,9 @@ func (A *Matrix) SafeInsertColumns(cols *Matrix, afterCol int) (*Matrix, error) 
 }
 
 func (A *Matrix) isOutOfBounds(row, col int) bool {
-	index := (row-1)*A.cols + col - 1
+	index := (row-1)*A.Cols + col - 1
 
-	if index >= len(A.values) {
+	if index >= len(A.Vals) {
 		return true
 	}
 
@@ -84,9 +84,9 @@ func (A *Matrix) isOutOfBounds(row, col int) bool {
 }
 
 func sameSize(A, B *Matrix) bool {
-	return A.rows == B.rows && A.cols == B.cols
+	return A.Rows == B.Rows && A.Cols == B.Cols
 }
 
 func isSquare(A, B *Matrix) bool {
-	return A.cols == B.rows
+	return A.Cols == B.Rows
 }

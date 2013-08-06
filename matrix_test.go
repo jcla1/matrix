@@ -40,7 +40,7 @@ func TestMatrixEye(t *testing.T) {
 	A := Eye(3)
 	expectedValues := []float64{1, 0, 0, 0, 1, 0, 0, 0, 1}
 
-	if !arraysIdentical(A.values, expectedValues) {
+	if !arraysIdentical(A.vals, expectedValues) {
 		t.Error("Unexpected value")
 	}
 }
@@ -153,7 +153,7 @@ func TestMatrixDot(t *testing.T) {
 
 	C, _ := A.SafeDot(B)
 
-	for _, val := range C.values {
+	for _, val := range C.vals {
 		if val != 12 {
 			t.Error("Error in scalar multiplication")
 		}
@@ -207,19 +207,19 @@ func TestMatrixInsertRow(t *testing.T) {
 	var values []float64
 	expectedValues := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
-	values = FromMatlab("[5 6; 7 8; 9 10]").InsertRows(FromMatlab("[1 2; 3 4]"), 0).values
+	values = FromMatlab("[5 6; 7 8; 9 10]").InsertRows(FromMatlab("[1 2; 3 4]"), 0).vals
 
 	if !arraysIdentical(values, expectedValues) {
 		t.Error("Insertion error (unshifting rows)")
 	}
 
-	values = FromMatlab("[1 2; 3 4; 9 10]").InsertRows(FromMatlab("[5 6; 7 8]"), 2).values
+	values = FromMatlab("[1 2; 3 4; 9 10]").InsertRows(FromMatlab("[5 6; 7 8]"), 2).vals
 
 	if !arraysIdentical(values, expectedValues) {
 		t.Error("Insertion error (middle rows)")
 	}
 
-	values = FromMatlab("[1 2; 3 4; 5 6]").InsertRows(FromMatlab("[7 8; 9 10]"), 3).values
+	values = FromMatlab("[1 2; 3 4; 5 6]").InsertRows(FromMatlab("[7 8; 9 10]"), 3).vals
 
 	if !arraysIdentical(values, expectedValues) {
 		t.Error("Insertion error (pushing rows)")

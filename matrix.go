@@ -27,7 +27,7 @@ func (err *MatrixError) Error() string { return err.ErrorString }
 // Matrix construct that holds all the information about a matrix
 type Matrix struct {
 	Rows, Cols int
-	Values     []float64
+	Vals     []float64
 }
 
 // A function that will apply an abitary transformation to an element in the matrix
@@ -39,7 +39,7 @@ func Zeros(rows, cols int) *Matrix {
 
 	A.Rows = rows
 	A.Cols = cols
-	A.Values = make([]float64, rows*cols)
+	A.Vals = make([]float64, rows*cols)
 
 	return A
 }
@@ -67,8 +67,8 @@ func Eye(size int) *Matrix {
 func Rand(rows, cols int) *Matrix {
 	A := Zeros(rows, cols)
 
-	for i := range A.Values {
-		A.Values[i] = rand.Float64()
+	for i := range A.Vals {
+		A.Vals[i] = rand.Float64()
 	}
 
 	return A
@@ -107,7 +107,7 @@ func (A *Matrix) ToMatlab() string {
 	buffer := new(bytes.Buffer)
 	buffer.WriteString("[")
 
-	for i, v := range A.Values {
+	for i, v := range A.Vals {
 		buffer.WriteString(fmt.Sprintf("%f ", v))
 
 		if (i+1)%A.Cols == 0 {
@@ -122,7 +122,7 @@ func (A *Matrix) ToMatlab() string {
 
 func FromSlice(s []float64, rows, cols int) *Matrix {
 	A := Zeros(rows, cols)
-	copy(A.Values, s)
+	copy(A.Vals, s)
 
 	return A
 }
@@ -144,8 +144,8 @@ func (A *Matrix) C() int {
 
 // Returns an array of all the values
 func (A *Matrix) Values() []float64 {
-	tmp := make([]float64, len(A.Values))
-	copy(tmp, A.Values)
+	tmp := make([]float64, len(A.Vals))
+	copy(tmp, A.Vals)
 	return tmp
 }
 
@@ -153,10 +153,10 @@ func (A *Matrix) Values() []float64 {
 func (A *Matrix) String() string {
 	buffer := new(bytes.Buffer)
 
-	for i, elem := range A.Values {
+	for i, elem := range A.Vals {
 		buffer.WriteString(fmt.Sprintf(" %.3f ", elem))
 
-		if (i+1)%A.Cols == 0 && i+1 != len(A.Values) {
+		if (i+1)%A.Cols == 0 && i+1 != len(A.Vals) {
 			buffer.WriteString("\n")
 		}
 	}
@@ -167,7 +167,7 @@ func (A *Matrix) String() string {
 // Returns an exact copy of the matrix
 func (A *Matrix) Copy() *Matrix {
 	B := Zeros(A.Rows, A.Cols)
-	copy(B.Values, A.Values)
+	copy(B.Vals, A.Vals)
 
 	return B
 }
@@ -179,7 +179,7 @@ func (A *Matrix) Unroll() *Matrix {
 // Reshapes the matrix. Make sure they have the same number of elements
 func (A *Matrix) Reshape(rows, cols int) *Matrix {
 	B := Zeros(rows, cols)
-	copy(B.Values, A.Values)
+	copy(B.Vals, A.Vals)
 
 	return B
 }
@@ -196,11 +196,11 @@ func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 	B := Zeros(A.Rows+rows.Rows, A.Cols)
 
 	// copy rows before inserted rows
-	copy(B.Values[0:afterRow*B.Cols], A.Values[0:afterRow*B.Cols])
+	copy(B.Vals[0:afterRow*B.Cols], A.Vals[0:afterRow*B.Cols])
 	// insert new rows
-	copy(B.Values[afterRow*B.Cols:afterRow*B.Cols+rows.Rows*B.Cols], rows.Values)
+	copy(B.Vals[afterRow*B.Cols:afterRow*B.Cols+rows.Rows*B.Cols], rows.Vals)
 	// copy rows after inserted rows
-	copy(B.Values[afterRow*B.Cols+rows.Rows*B.Cols:], A.Values[afterRow*B.Cols:])
+	copy(B.Vals[afterRow*B.Cols+rows.Rows*B.Cols:], A.Vals[afterRow*B.Cols:])
 
 	return B
 }
@@ -209,7 +209,7 @@ func (A *Matrix) InsertRows(rows *Matrix, afterRow int) *Matrix {
 // The indexing for the rows start with 1 and go upto A.R()
 func (A *Matrix) RemoveRow(row int) *Matrix {
 	B := Zeros(A.Rows-1, A.Cols)
-	copy(B.Values, append(append([]float64{}, A.Values[:(row-1)*A.Cols]...), A.Values[(row-1)*A.Cols+A.Cols:]...))
+	copy(B.Vals, append(append([]float64{}, A.Vals[:(row-1)*A.Cols]...), A.Vals[(row-1)*A.Cols+A.Cols:]...))
 	return B
 }
 
@@ -225,9 +225,9 @@ func (A *Matrix) InsertColumns(cols *Matrix, afterCol int) *Matrix {
 	B := Zeros(A.Rows, A.Cols+cols.Cols)
 
 	for i := 0; i < A.Rows; i++ {
-		copy(B.Values[i*B.Cols:i*B.Cols+afterCol], A.Values[i*A.Cols:i*A.Cols+afterCol])
-		copy(B.Values[i*B.Cols+afterCol:i*B.Cols+afterCol+cols.Cols], cols.Values[i*cols.Cols:(i+1)*cols.Cols])
-		copy(B.Values[i*B.Cols+afterCol+cols.Cols:(i+1)*B.Cols], A.Values[i*A.Cols+afterCol:(i+1)*A.Cols])
+		copy(B.Vals[i*B.Cols:i*B.Cols+afterCol], A.Vals[i*A.Cols:i*A.Cols+afterCol])
+		copy(B.Vals[i*B.Cols+afterCol:i*B.Cols+afterCol+cols.Cols], cols.Vals[i*cols.Cols:(i+1)*cols.Cols])
+		copy(B.Vals[i*B.Cols+afterCol+cols.Cols:(i+1)*B.Cols], A.Vals[i*A.Cols+afterCol:(i+1)*A.Cols])
 	}
 
 	return B
@@ -240,8 +240,8 @@ func (A *Matrix) InsertColumns(cols *Matrix, afterCol int) *Matrix {
 //		return sigmoid(value)
 //	})
 func (A *Matrix) Apply(f ApplyFunc) *Matrix {
-	for i, v := range A.Values {
-		A.Values[i] = f(i, v)
+	for i, v := range A.Vals {
+		A.Vals[i] = f(i, v)
 	}
 
 	return A
@@ -253,7 +253,7 @@ func (A *Matrix) Apply(f ApplyFunc) *Matrix {
 // checking what so ever. If you'd like a safe version
 // use: SafeGet
 func (A *Matrix) Get(row, col int) float64 {
-	return A.Values[(row-1)*A.Cols+col-1]
+	return A.Vals[(row-1)*A.Cols+col-1]
 }
 
 // Set the element at [row, col] to val.
@@ -263,7 +263,7 @@ func (A *Matrix) Get(row, col int) float64 {
 // use: SafeSet
 func (A *Matrix) Set(row, col int, val float64) {
 
-	A.Values[(row-1)*A.Cols+col-1] = val
+	A.Vals[(row-1)*A.Cols+col-1] = val
 
 }
 
@@ -273,7 +273,7 @@ func (A *Matrix) Transpose() *Matrix {
 
 	for i := 1; i <= A.Rows; i++ {
 		for j := 1; j <= A.Cols; j++ {
-			B.Values[(j-1)*B.Cols+i-1] = A.Values[(i-1)*A.Cols+j-1]
+			B.Vals[(j-1)*B.Cols+i-1] = A.Vals[(i-1)*A.Cols+j-1]
 		}
 	}
 
@@ -288,8 +288,8 @@ func (A *Matrix) Add(B *Matrix) (*Matrix, error) {
 
 	C := Zeros(A.Rows, A.Cols)
 
-	for i, val := range A.Values {
-		C.Values[i] = val + B.Values[i]
+	for i, val := range A.Vals {
+		C.Vals[i] = val + B.Vals[i]
 	}
 
 	return C, nil
@@ -303,8 +303,8 @@ func (A *Matrix) Sub(B *Matrix) (*Matrix, error) {
 
 	C := Zeros(A.Rows, A.Cols)
 
-	for i, val := range A.Values {
-		C.Values[i] = val - B.Values[i]
+	for i, val := range A.Vals {
+		C.Vals[i] = val - B.Vals[i]
 	}
 
 	return C, nil
@@ -325,10 +325,10 @@ func (A *Matrix) Mul(B *Matrix) *Matrix {
 			sum := float64(0)
 
 			for k := 0; k < A.Cols; k++ {
-				sum += A.Values[i*A.Cols+k] * B.Values[k*B.Cols+j]
+				sum += A.Vals[i*A.Cols+k] * B.Vals[k*B.Cols+j]
 			}
 
-			C.Values[i*C.Cols+j] = sum
+			C.Vals[i*C.Cols+j] = sum
 		}
 	}
 
@@ -337,8 +337,8 @@ func (A *Matrix) Mul(B *Matrix) *Matrix {
 
 func (A *Matrix) Dot(B *Matrix) float64 {
 	sum := 0.0
-	for i, v := range A.Values {
-		sum += v * B.Values[i]
+	for i, v := range A.Vals {
+		sum += v * B.Vals[i]
 	}
 
 	return sum
@@ -353,8 +353,8 @@ func (A *Matrix) Dot(B *Matrix) float64 {
 func (A *Matrix) EWProd(B *Matrix) *Matrix {
 	C := Zeros(A.Rows, A.Cols)
 
-	for i, val := range A.Values {
-		C.Values[i] = val * B.Values[i]
+	for i, val := range A.Vals {
+		C.Vals[i] = val * B.Vals[i]
 	}
 
 	return C
@@ -364,8 +364,8 @@ func (A *Matrix) EWProd(B *Matrix) *Matrix {
 func (A *Matrix) Scale(f float64) *Matrix {
 	B := Zeros(A.Rows, A.Cols)
 
-	for i, val := range A.Values {
-		B.Values[i] = val * f
+	for i, val := range A.Vals {
+		B.Vals[i] = val * f
 	}
 
 	return B
@@ -375,8 +375,8 @@ func (A *Matrix) Scale(f float64) *Matrix {
 func (A *Matrix) Power(n float64) *Matrix {
 	B := Zeros(A.Rows, A.Cols)
 
-	for i, val := range A.Values {
-		B.Values[i] = math.Pow(val, n)
+	for i, val := range A.Vals {
+		B.Vals[i] = math.Pow(val, n)
 	}
 
 	return B
@@ -384,8 +384,8 @@ func (A *Matrix) Power(n float64) *Matrix {
 
 // Add n to all elements in the matrix (in-place)
 func (A *Matrix) AddNum(n float64) *Matrix {
-	for i := range A.Values {
-		A.Values[i] += n
+	for i := range A.Vals {
+		A.Vals[i] += n
 	}
 
 	return A
